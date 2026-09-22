@@ -323,11 +323,255 @@ class World:
         """
         self._verifier_dans_la_grille(a)
         self._verifier_dans_la_grille(b)
-        # Indice : parcours exact de grille (DDA/Amanatides-Woo) : avancer cellule par cellule vers la frontiere la plus proche, tester l'occupation a chaque cellule visitee sauf aux deux extremites
-        # Tests : test_ligne_de_vue_libre_a_cote_de_l_obstacle_mais_pas_a_travers, test_ligne_de_vue_libre_diagonale_qui_traverse_une_cellule_occupee_est_bloquee, test_ligne_de_vue_libre_refuse_le_coin_partage_par_deux_cellules_occupees_en_diagonale
-        raise NotImplementedError(
-            "fonction 'World.ligne_de_vue_libre' a implementer (voir l'enonce et les tests cites)"
-        )
+        
+        if a == b:
+            return True
+
+        ax, ay = a
+        bx, by = b
+        dx = bx - ax
+        dy = by - ay
+
+        # Directions de parcours
+        step_x = 1 if dx > 0 else -1
+        step_y = 1 if dy > 0 else -1
+
+        # Distances en "unites de cellule" depuis le centre de la cellule courante jusqu'à la frontière
+        # Le centre est à 0.5 de la frontière.
+        # Si dx > 0, on avance vers la droite. La frontière est à 0.5 cellule.
+        # Si dx < 0, on avance vers la gauche. La frontière est à 0.5 cellule.
+        
+        # On utilise des entiers pour éviter les problèmes de flottants.
+        # On multiplie tout par 2 pour travailler avec des demi-unités si nécessaire, ou simplement des entiers si possible.
+        # Ici, les coordonnées sont des entiers. Le segment va de (ax+0.5, ay+0.5) à (bx+0.5, by+0.5).
+        
+        # DDA standard :
+        # tMaxX : distance paramétrique pour atteindre la prochaine frontière verticale
+        # tMaxY : distance paramétrique pour atteindre la prochaine frontière horizontale
+        
+        # On travaille dans le repère des centres.
+        # Position initiale : (0, 0) relativement à a.
+        # Position cible : (dx, dy).
+        
+        # Frontières :
+        # Si dx > 0 : prochaine frontière x est à 0.5. tMaxX = 0.5 / dx
+        # Si dx < 0 : prochaine frontière x est à -0.5. tMaxX = 0.5 / -dx = 0.5 / |dx|
+        # tDeltaX = 1 / |dx| (distance paramétrique entre deux frontières verticales)
+        
+        # Pour éviter les flottants, on peut utiliser des fractions.
+        # tMaxX = 1 / (2 * |dx|)
+        # tDeltaX = 1 / |dx|
+        
+        # Nous allons utiliser une approche par entiers en comparant les fractions.
+        # Soit t le paramètre du segment [0, 1].
+        # x(t) = ax + 0.5 + t * dx
+        # y(t) = ay + 0.5 + t * dy
+        
+        # On cherche les valeurs de t où x(t) ou y(t) est un entier (frontière).
+        
+        # Si dx != 0 :
+        # x(t) = k (entier) => t = (k - ax - 0.5) / dx
+        # Les k possibles sont les entiers strictement entre ax et bx (bornes exclues car on ne teste pas les extrémités, mais on doit tester les cellules traversées).
+        # En fait, on parcourt les cellules.
+        
+        # Algorithme DDA classique :
+        # 1. Calculer tMaxX et tMaxY pour la première frontière.
+        # 2. Calculer tDeltaX et tDeltaY.
+        # 3. Boucle : avancer vers la frontière la plus proche (tMaxX < tMaxY ? X : Y).
+        # 4. Tester la nouvelle cellule.
+        
+        # Pour gérer le cas du "coin partagé", il faut détecter si on passe exactement par un coin.
+        # Cela arrive si tMaxX == tMaxY (à la précision près, ou exactement en fractions).
+        
+        # Utilisons des entiers pour les comparaisons exactes.
+        # tMaxX = numX / denX
+        # tMaxY = numY / denY
+        
+        # Si dx > 0 : première frontière x est à ax + 1. Distance = 0.5. t = 0.5 / dx.
+        # Si dx < 0 : première frontière x est à ax. Distance = 0.5. t = 0.5 / (-dx).
+        
+        # On peut simplifier :
+        # tMaxX = 1 / (2 * abs(dx))
+        # tMaxY = 1 / (2 * abs(dy))
+        
+        # tDeltaX = 1 / abs(dx)
+        # tDeltaY = 1 / abs(dy)
+        
+        # Comparaison de tMaxX et tMaxY :
+        # 1 / (2 * abs(dx)) < 1 / (2 * abs(dy))  <=>  abs(dy) < abs(dx)
+        
+        # Égalité : abs(dx) == abs(dy) (et même signe relatif pour le pas ? Non, juste les valeurs absolues pour la distance).
+        
+        # Si dx == 0 : tMaxX = inf
+        # Si dy == 0 : tMaxY = inf
+        
+        # Implémentation avec entiers :
+        # On garde une fraction t = t_num / t_den ? Non, c'est plus simple de comparer les temps.
+        
+        # Soit :
+        # t_max_x = 1 / (2 * |dx|) si dx != 0 else inf
+        # t_max_y = 1 / (2 * |dy|) si dy != 0 else inf
+        
+        # On compare 1/|dx| et 1/|dy| pour savoir qui est le plus petit (la frontière la plus proche).
+        # 1/|dx| < 1/|dy|  <=> |dy| < |dx|
+        
+        # Si |dx| == |dy|, on arrive au coin.
+        
+        # Cellule courante : (cx, cy) = a
+        cx, cy = a
+        
+        # Temps restant jusqu'à la fin du segment ? On peut s'arrêter quand on atteint b.
+        # Mais b est dans une cellule. Si on atteint la frontière de b, on entre dans b.
+        # On ne doit pas tester b.
+        
+        # On boucle tant qu'on n'a pas atteint la cellule b.
+        # Mais comment savoir si on a atteint b ?
+        # Si on fait un pas et qu'on arrive dans b, on s'arrête.
+        
+        # Attention aux cas où dx ou dy est 0.
+        
+        # Variables pour le DDA :
+        # t_max_x : temps pour atteindre la prochaine frontière X
+        # t_max_y : temps pour atteindre la prochaine frontière Y
+        
+        # On utilise des fractions pour la comparaison exacte.
+        # t_max_x = num_x / den_x
+        # t_max_y = num_y / den_y
+        
+        if dx == 0:
+            t_max_x_num, t_max_x_den = 1, 0 # inf
+        else:
+            t_max_x_num, t_max_x_den = 1, 2 * abs(dx)
+            
+        if dy == 0:
+            t_max_y_num, t_max_y_den = 1, 0 # inf
+        else:
+            t_max_y_num, t_max_y_den = 1, 2 * abs(dy)
+            
+        # t_delta_x : temps pour traverser une cellule complète
+        if dx == 0:
+            t_delta_x_num, t_delta_x_den = 1, 0
+        else:
+            t_delta_x_num, t_delta_x_den = 1, abs(dx)
+            
+        if dy == 0:
+            t_delta_y_num, t_delta_y_den = 1, 0
+        else:
+            t_delta_y_num, t_delta_y_den = 1, abs(dy)
+            
+        # Boucle principale
+        # On s'arrête quand on atteint la cellule b.
+        # Comme on ne teste pas b, on peut s'arrêter dès qu'on "entre" dans b.
+        
+        # Mais attention : si a et b sont adjacents, on ne visite aucune cellule intermédiaire.
+        # Si a=(0,0), b=(1,0). dx=1, dy=0.
+        # t_max_x = 1/2. t_max_y = inf.
+        # On avance en X. Nouvelle cellule (1,0). C'est b. On s'arrête. Retourne True.
+        
+        # Si a=(0,0), b=(2,0). dx=2.
+        # t_max_x = 1/4.
+        # Avance X -> (1,0). Ce n'est pas b. Tester (1,0).
+        # t_max_x += 1/2 -> 3/4.
+        # Avance X -> (2,0). C'est b. Arrêt.
+        
+        # Si a=(0,0), b=(1,1). dx=1, dy=1.
+        # t_max_x = 1/2, t_max_y = 1/2. Égalité.
+        # On avance en X et Y. Nouvelle cellule (1,1). C'est b. Arrêt.
+        # Mais il faut vérifier le coin !
+        
+        # Cas du coin :
+        # Si on avance en diagonale (t_max_x == t_max_y), on passe par le coin (cx+step_x, cy+step_y).
+        # Il faut vérifier si les deux cellules adjacentes (cx+step_x, cy) et (cx, cy+step_y) sont occupées.
+        # Si oui, bloquer.
+        
+        # Algorithme :
+        while (cx, cy) != (bx, by):
+            # Comparer t_max_x et t_max_y
+            # t_max_x = num_x / den_x
+            # t_max_y = num_y / den_y
+            
+            # Comparaison : num_x * den_y vs num_y * den_x
+            # Si den_x == 0 (inf), alors t_max_x est inf.
+            
+            left = t_max_x_num * t_max_y_den if t_max_x_den != 0 else float('inf')
+            right = t_max_y_num * t_max_x_den if t_max_y_den != 0 else float('inf')
+            
+            # Plus simple : gérer les infinis explicitement.
+            
+            x_is_inf = t_max_x_den == 0
+            y_is_inf = t_max_y_den == 0
+            
+            if x_is_inf and y_is_inf:
+                break # Ne devrait pas arriver si a != b
+                
+            if x_is_inf:
+                move_x = False
+                move_y = True
+            elif y_is_inf:
+                move_x = True
+                move_y = False
+            else:
+                # Comparer 1/(2|dx|) et 1/(2|dy|)
+                # Équivaut à comparer |dy| et |dx|
+                # Si |dy| < |dx|, alors 1/|dx| < 1/|dy| => t_max_x < t_max_y => avancer en X
+                # Si |dy| > |dx|, alors t_max_y < t_max_x => avancer en Y
+                # Si |dy| == |dx|, égalité => avancer en diagonale
+                
+                if abs(dy) < abs(dx):
+                    move_x = True
+                    move_y = False
+                elif abs(dy) > abs(dx):
+                    move_x = False
+                    move_y = True
+                else:
+                    move_x = True
+                    move_y = True
+            
+            # Avant de bouger, si on bouge en diagonale, vérifier le coin.
+            if move_x and move_y:
+                # On part de (cx, cy) vers (cx+step_x, cy+step_y)
+                # Le coin est partagé par (cx+step_x, cy) et (cx, cy+step_y)
+                # Attention : si on est déjà à la bordure ? Le DDA s'arrête à la grille, mais ici on s'arrête à b.
+                # Les cellules adjacentes doivent être dans la grille pour exister.
+                cote_a = (cx + step_x, cy)
+                cote_b = (cx, cy + step_y)
+                
+                # Si ces cellules sont dans la grille et occupées, bloquer.
+                if self.est_dans_la_grille(cote_a) and self.est_dans_la_grille(cote_b):
+                    if cote_a in self._occupees and cote_b in self._occupees:
+                        return False
+            
+            # Effectuer le déplacement
+            if move_x:
+                cx += step_x
+                # Mettre à jour t_max_x
+                # t_max_x += t_delta_x
+                # t_max_x = num_x/den_x + num_dx/den_dx
+                # = (num_x * den_dx + num_dx * den_x) / (den_x * den_dx)
+                if t_max_x_den != 0 and t_delta_x_den != 0:
+                    new_num = t_max_x_num * t_delta_x_den + t_delta_x_num * t_max_x_den
+                    new_den = t_max_x_den * t_delta_x_den
+                    # Simplifier ? Pas nécessaire pour la comparaison si on refait le calcul à chaque fois,
+                    # mais les nombres peuvent devenir grands.
+                    # Pour une grille 64x64, c'est négligeable.
+                    t_max_x_num, t_max_x_den = new_num, new_den
+                # Si l'un des deux était inf, le reste inf (mais on n'ajoute pas à inf)
+                
+            if move_y:
+                cy += step_y
+                if t_max_y_den != 0 and t_delta_y_den != 0:
+                    new_num = t_max_y_num * t_delta_y_den + t_delta_y_num * t_max_y_den
+                    new_den = t_max_y_den * t_delta_y_den
+                    t_max_y_num, t_max_y_den = new_num, new_den
+            
+            # Après le déplacement, on est dans la nouvelle cellule (cx, cy).
+            # Si c'est b, on s'arrête (la boucle while s'occupera de ça).
+            # Sinon, on teste si (cx, cy) est occupée.
+            if (cx, cy) != (bx, by):
+                if (cx, cy) in self._occupees:
+                    return False
+        
+        return True
 
     def cellules_obstacle(self) -> frozenset[Cellule]:
         """Copie immuable des cellules actuellement occupees, pour l'affichage."""
