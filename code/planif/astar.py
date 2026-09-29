@@ -62,8 +62,49 @@ def planifier(monde: World, depart: Cellule, but: Cellule) -> ResultatPlanificat
     # chemin.
     # Indice : tas priorise par cout f = cout_venu + heuristique, fermer avant d'expandre
     # Tests : test_chemin_en_ligne_droite_sans_obstacle_ne_fait_aucun_detour, test_obstacle_contourne_le_chemin_existe_et_s_allonge, test_arrivee_enfermee_ne_rend_rien
-    raise NotImplementedError(
-        "fonction 'astar.planifier' a implementer (voir l'enonce et les tests cites)"
+    
+    compteur = itertools.count()
+    cout_venu = {depart: 0.0}
+    parent = {}
+    tas = [(monde.distance_heuristique(depart, but), next(compteur), depart)]
+    fermes = set()
+    cellules_examinees = 0
+
+    while tas:
+        cout_f, _, cellule = heapq.heappop(tas)
+        
+        if cellule in fermes:
+            continue
+        
+        fermes.add(cellule)
+        cellules_examinees += 1
+        
+        if cellule == but:
+            chemin = _reconstruire(parent, depart, but)
+            return ResultatPlanification(
+                chemin=chemin,
+                longueur=cout_venu[but],
+                cellules_examinees=cellules_examinees
+            )
+            
+        for voisin in monde.voisins(cellule):
+            if voisin in fermes:
+                continue
+            if monde.est_occupee(voisin):
+                continue
+                
+            nouveau_cout = cout_venu[cellule] + monde.cout_deplacement(cellule, voisin)
+            
+            if voisin not in cout_venu or nouveau_cout < cout_venu[voisin]:
+                cout_venu[voisin] = nouveau_cout
+                parent[voisin] = cellule
+                cout_f = nouveau_cout + monde.distance_heuristique(voisin, but)
+                heapq.heappush(tas, (cout_f, next(compteur), voisin))
+                
+    return ResultatPlanification(
+        chemin=None,
+        longueur=0.0,
+        cellules_examinees=cellules_examinees
     )
 
 
