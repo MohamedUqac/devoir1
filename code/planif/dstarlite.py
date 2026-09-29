@@ -119,11 +119,33 @@ class DStarLite:
         divergent, et propager la mise a jour aux voisins. Seuls les sommets touches par le
         dernier changement sont reexamines, jamais toute la grille.
         """
-        # Indice : depiler tant que la cle du sommet est inferieure a celle du depart, propager g/rhs aux voisins potentiels
-        # Tests : test_moins_de_cellules_reexaminees_qu_une_replanification_complete, test_premier_calcul_dstarlite_egale_la_longueur_d_astar
-        raise NotImplementedError(
-            "fonction 'DStarLite._calculer_chemin_le_plus_court' a implementer (voir l'enonce et les tests cites)"
-        )
+        cle_depart = self._cle(self.depart)
+        while True:
+            cle, sommet = self._sommet_haut()
+            if cle is None:
+                break
+            if cle < cle_depart or (self._g_de(self.depart) != self._rhs_de(self.depart)):
+                if cle != self._cle(sommet):
+                    # Cle perimee : re-inserer avec la bonne cle
+                    self._dans_file.pop(sommet, None)
+                    cle_nouvelle = self._cle(sommet)
+                    self._dans_file[sommet] = cle_nouvelle
+                    heapq.heappush(self._file, (cle_nouvelle, sommet))
+                    continue
+                if self._g_de(sommet) > self._rhs_de(sommet):
+                    # g > rhs : le cout reel est trop eleve, on le diminue
+                    self._g[sommet] = self._rhs_de(sommet)
+                    for voisine in self.monde.voisins(sommet):
+                        self._mettre_a_jour_sommet(voisine)
+                else:
+                    # g <= rhs : le cout reel est trop bas, on le remonte a l'infini
+                    self._g[sommet] = _INFINI
+                    self._mettre_a_jour_sommet(sommet)
+                    for voisine in self.monde.voisins(sommet):
+                        self._mettre_a_jour_sommet(voisine)
+                self.cellules_reexaminees += 1
+            else:
+                break
 
     # --------------------------------------------------------------------------- public
 
