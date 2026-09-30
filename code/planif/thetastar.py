@@ -101,11 +101,22 @@ def _mettre_a_jour_sommet(
     ligne directe, on rattache `voisine` au grand-parent (saute `actuelle`) plutot qu'a
     `actuelle` elle-meme, quand cela raccourcit le chemin.
     """
-    # Indice : regle de Nash et al. : si le grand-parent voit voisine en ligne directe, rattacher au grand-parent plutot qu'a actuelle
-    # Tests : test_thetastar_a_moins_de_points_de_passage_qu_astar_sur_la_meme_grille, test_chemin_theta_reste_libre_de_collision
-    raise NotImplementedError(
-        "fonction 'thetastar._mettre_a_jour_sommet' a implementer (voir l'enonce et les tests cites)"
-    )
+    cout_via_actuelle = cout_venu[actuelle] + monde.cout_deplacement(actuelle, voisine)
+    
+    nouveau_cout = cout_via_actuelle
+    nouveau_parent = actuelle
+
+    grand_parent = parent[actuelle]
+    if grand_parent != actuelle and monde.ligne_de_vue_libre(grand_parent, voisine):
+        cout_via_grand_parent = cout_venu[grand_parent] + monde.cout_deplacement(grand_parent, voisine)
+        if cout_via_grand_parent < cout_via_actuelle:
+            nouveau_cout = cout_via_grand_parent
+            nouveau_parent = grand_parent
+
+    if voisine not in cout_venu or nouveau_cout < cout_venu[voisine]:
+        cout_venu[voisine] = nouveau_cout
+        parent[voisine] = nouveau_parent
+        heapq.heappush(file, (nouveau_cout + monde.distance_heuristique(voisine, but), next(compteur), voisine))
 
 
 def _reconstruire(parent: dict[Cellule, Cellule], depart: Cellule, but: Cellule) -> list[Cellule]:
