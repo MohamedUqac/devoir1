@@ -373,10 +373,12 @@ class World:
                 move_x = True
                 move_y = False
             else:
-                if abs(dy) < abs(dx):
+                gauche = t_max_x_num * t_max_y_den
+                droite = t_max_y_num * t_max_x_den
+                if gauche < droite:
                     move_x = True
                     move_y = False
-                elif abs(dy) > abs(dx):
+                elif gauche > droite:
                     move_x = False
                     move_y = True
                 else:
