@@ -139,6 +139,7 @@ class DStarLite:
             if self._g_de(sommet) > self._rhs_de(sommet):
                 # g > rhs : le cout reel est trop eleve, on le diminue
                 self._g[sommet] = self._rhs_de(sommet)
+                self._dans_file.pop(sommet, None)
                 for voisine in self.monde.voisins(sommet):
                     self._mettre_a_jour_sommet(voisine)
             else:
