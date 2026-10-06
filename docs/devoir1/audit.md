@@ -4,7 +4,7 @@
 
 ## Tests
 - [x] `pytest test/devoir1` : 37 passed et 5 failed, tous les échecs localisés dans `test_thumb_counter.py` (`NotImplementedError` sur `ThumbCounter.update`).
-- [ ] `test_emotion_detector.py`, `test_hud.py` : non vérifiés dans la passe du 2026-10-06.
+- [x] `test_emotion_detector.py`, `test_hud.py` et `test_thumb_detector.py` : réussis (inclus dans les 37 passed).
 
 ## Conformité à la spec
 - [x] `is_thumb_extended` : implémenté (commit 8bb8b77), comparaison relative sans seuil.
