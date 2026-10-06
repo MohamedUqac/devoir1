@@ -1,20 +1,19 @@
 # Audit — Devoir 1
 
-> État au 2026-10-06. À refaire après fusion des branches.
+> État vérifié le 2026-10-06.
 
 ## Tests
-- `test_thumb_detector.py` : 19/19 réussis.
-- `test_thumb_counter.py` : non réussis, `ThumbCounter.update` pas encore implémenté.
-- `test_emotion_detector.py`, `test_hud.py` : à relancer après fusion (non vérifiés ici).
+- [x] `pytest test/devoir1` : 37 passed et 5 failed, tous les échecs localisés dans `test_thumb_counter.py` (`NotImplementedError` sur `ThumbCounter.update`).
+- [ ] `test_emotion_detector.py`, `test_hud.py` : non vérifiés dans la passe du 2026-10-06.
 
 ## Conformité à la spec
-- Code fourni non modifié : à confirmer avec `git diff master -- code/detect_thumbs.py code/emotion_detector.py`.
-- `is_thumb_extended` : conforme (comparaison relative, sans seuil).
-- `ThumbCounter.update` : non conforme tant que le stub existe.
+- [x] `is_thumb_extended` : implémenté (commit 8bb8b77), comparaison relative sans seuil.
+- [x] Code fourni (`detect_thumbs.py`, `emotion_detector.py`) : non modifié par aucun commit après 80f87ec.
+- [!] `ThumbCounter.update` : non implémenté, le stub lève `NotImplementedError`.
 
 ## Risques
-- Dépendance au travail du collègue pour le filtre temporel.
-- Rapport incomplet (sections listées dans plan.md).
+- [!] Branches `Merello16` et `sokhona26` : non examinées.
+- [!] Rapport incomplet : sections listées dans `plan.md` absentes ou incomplètes.
 
 ## Décision
-Pas prêt à la remise. Relancer `pytest test/devoir1` après fusion et mettre à jour ce fichier.
+- [!] Pas prêt à la remise tant que `ThumbCounter.update` n'est pas implémenté et que le rapport est incomplet.
