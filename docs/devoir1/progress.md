@@ -1,15 +1,15 @@
 # Progress — Devoir 1
 
-> Historique du dépôt `devoir1` (commits du Devoir 1, dates issues de `git log --format="%h %ad %s" --date=short -- devoir1/master`).
+> Historique du dépôt `devoir1` (commits du Devoir 1, dates fournies pour cette mise à jour).
 
 | Commit | Date | Message |
 |---|---|---|
-| 80f87ec | 2025-11-23 | feat: ajouter le code Devoir1 (detection pouce leve) sans toucher a Lab1 |
-| 8bb8b77 | 2025-11-23 | feat : implémenter is_thumb_extended |
-| dcf4cb6 | 2025-11-23 | Merge pull request #1 from MohamedUqac/mdiarra5/dev |
-| 6e5632a | 2025-11-23 | docs: ajouter section methode du rapport (echelle et rotation) |
-| 91beaa4 | 2025-11-23 | docs: ajouter spec, plan, progress et audit du devoir 1 |
-| 694b0dc | 2025-11-23 | Merge pull request #2 from MohamedUqac/mdiarra5/dev |
+| 80f87ec | 2026-09-30 | feat: ajouter le code Devoir1 (detection pouce leve) sans toucher a Lab1 |
+| 8bb8b77 | 2026-09-30 | feat : implémenter is_thumb_extended |
+| dcf4cb6 | 2026-09-30 | Merge pull request #1 from MohamedUqac/mdiarra5/dev |
+| 6e5632a | 2026-09-30 | docs: ajouter section methode du rapport (echelle et rotation) |
+| 91beaa4 | 2026-10-06 | docs: ajouter spec, plan, progress et audit du devoir 1 |
+| 694b0dc | 2026-10-06 | Merge pull request #2 from MohamedUqac/mdiarra5/dev |
 
 ## Résultat des tests
 
@@ -37,4 +37,4 @@ Commande : `.venv\Scripts\python.exe -m pytest test\devoir1 -q --tb=no`
 | `ThumbCounter.update` | à faire | 5 échecs dans `test/devoir1/test_thumb_counter.py` |
 | Paragraphe filtrage temporel | à faire | non prouvé par les commits listés |
 | Autres sections du rapport | à faire | non prouvé par les commits listés |
-| Fusion des branches et PR vers master | fait | commits `dcf4cb6` et `694b0dc` |
+| PR #1 et #2 de mdiarra5/dev fusionnées ; branches Merello16 et sokhona26 non examinées | fait | commits `dcf4cb6` et `694b0dc` |
