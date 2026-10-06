@@ -353,11 +353,10 @@ class ThumbCounter:
         """
         if raw_count < 0:
             raise ValueError(f"Un decompte de pouces ne peut pas etre negatif : {raw_count}.")
-        # Indice : ajouter a l'historique puis publier seulement quand la fenetre est unanime
-        # Tests : test_valeur_repetee_window_fois_est_publiee, test_valeurs_alternees_ne_publient_jamais
-        raise NotImplementedError(
-            "fonction 'ThumbCounter.update' a implementer (voir l'enonce et les tests cites)"
-        )
+        self._history.append(raw_count)
+        if len(self._history) == self._window and all(x == raw_count for x in self._history):
+            self._stable = raw_count
+        return self._stable
 
     def reset(self) -> None:
         """Vider l'historique et remettre le decompte stable a zero."""
