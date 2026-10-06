@@ -24,13 +24,8 @@
 
 ## ThumbCounter
 
-- [ ] `ThumbCounter.update` à faire
-- [!] tests — suite still failing : 37 passed, 5 failed dans `test/devoir1/test_thumb_counter.py`
-  - `test_valeur_repetee_window_fois_est_publiee`
-  - `test_valeur_repetee_moins_que_window_fois_nest_pas_publiee`
-  - `test_valeurs_alternees_ne_publient_jamais`
-  - `test_reset_remet_le_decompte_stable_a_zero`
-  - `test_les_premieres_maj_ne_publient_quau_dernier_tour_de_la_fenetre`
+- [x] `ThumbCounter.update` implémenté avec aider — commit `4010d82`
+- Note: 42 passed dans `test/devoir1/`
 
 ## Rapport
 
