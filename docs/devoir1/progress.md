@@ -14,13 +14,13 @@
 ## Mise en place
 
 - [x] Dépôt `devoir1` créé, branche `mdiarra5/dev` — commits `80f87ec`, `8bb8b77` et merges `dcf4cb6`, `694b0dc`
-- [x] PR #1 et #2 de `mdiarra5/dev` fusionnées — commits `dcf4cb6` et `694b0dc`
-- Note: branches `Merello16` et `sokhona26` non examinées
+- [x] PR #1, #2, #4, #5, #6, #7 et #8 fusionnées dans master
+- Note: sokhona26 fusionnée (PR #5) ; Merello16 n'a aucun commit en avance sur master
 
 ## is_thumb_extended
 
 - [x] `is_thumb_extended` implémenté — commit `8bb8b77`
-- Note: tests de `test_thumb_detector.py` inclus dans les 37 passed
+- Note: tests de `test_thumb_detector.py` inclus dans les 42 passed
 
 ## ThumbCounter
 
@@ -32,7 +32,9 @@
 - [x] `rapport/methode.md` (seuil fixe vs relatif, rotation) — commit `6e5632a`
 - [ ] Paragraphe filtrage temporel
 - [ ] Autres sections du rapport
+- [x] test caméra en direct réussi le 2026-10-06
+- [ ] test caméra à refaire avec vidéo pour le rapport
 
 ## Audit
 
-- [ ] Audit à faire
+- [x] audit.md à jour (PR #6 et #8) : 42 passed, relecture du code sans défaut constaté
