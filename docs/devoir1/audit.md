@@ -17,3 +17,7 @@
 
 ## Décision
 - [x] Le code est complet et les tests passent. Il reste le rapport à finir avant la remise.
+
+## Relecture du code
+
+aucun défaut constaté
