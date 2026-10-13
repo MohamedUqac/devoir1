@@ -30,7 +30,7 @@
 ## Rapport
 
 - [x] `rapport/methode.md` (seuil fixe vs relatif, rotation) — commit `6e5632a`
-- [ ] Paragraphe filtrage temporel
+- [x] Paragraphe filtrage temporel
 - [ ] Autres sections du rapport
 - [x] test caméra en direct réussi le 2026-10-06
 - [ ] test caméra à refaire avec vidéo pour le rapport
