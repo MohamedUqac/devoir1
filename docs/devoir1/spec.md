@@ -1,4 +1,4 @@
-# Spec — Devoir 1 : détection du pouce levé (MediaPipe Hands)
+# Spec  Devoir 1 : détection du pouce levé (MediaPipe Hands)
 
 ## Objectif
 À partir d'une image de caméra, détecter les mains avec MediaPipe Hands (21 repères par main) et afficher le nombre de pouces levés, de façon stable dans le temps.
@@ -13,8 +13,6 @@
 
 ## Contraintes
 - Ne pas modifier le code fourni (`detect_thumbs.py`, `emotion_detector.py`).
-- Les tests de `test/devoir1/` doivent passer.
-- Rapport : `rapport/methode.md` et autres sections selon l'énoncé.
 
 ## Critère de réussite
 Tous les tests de `test/devoir1/` passent ; la démo détecte correctement 0, 1 ou 2 pouces sans clignotement.
